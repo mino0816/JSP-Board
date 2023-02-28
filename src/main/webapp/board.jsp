@@ -1,6 +1,10 @@
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
  <%@page import="java.io.PrintWriter" %>
+ <%@page import="bbs.BbsDAO" %>
+ <%@page import="bbs.Bbs" %>
+ <%@page import="java.util.ArrayList" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,6 +22,13 @@
 		String userID = null;
 		if(session.getAttribute("userID") !=null){
 			userID= (String)session.getAttribute("userID");  
+		}
+		//해당 게시판이 몇번째 페이지인지 알기 위해서 pageNumber를 1로 기본 값을 준다
+		int pageNumber =1 ;
+		//파라미터로 pageNumber가 넘어왔다면
+		if(request.getParameter("pageNumber")!=null){
+			//넘어온 파라미터를 정수로 바꿔주는 작업
+			pageNumber = Integer.parseInt(request.getParameter("pageNumber"));
 		}
 	%>
 	<nav class="navbar navbar-default">
@@ -78,13 +89,27 @@
 					</tr>					
 				</thead>
 				<tbody>
+				<%
+					//새로운 인스턴스를 만든다
+					BbsDAO bbsDAO = new BbsDAO();
+					//list를 만들고 현재 페이지에있는 값들을 list에 담는다.
+					ArrayList<Bbs> list = bbsDAO.getList(pageNumber);
+					for(int i = 0; i<list.size(); i++){
+				%>
 					<tr>
-						<td>1</td>
-						<td>안녕하세요</td>
-						<td>홍길동</td>
-						<td>2023-02-27</td>
+						<!-- 현재 게시글의 정보들을 가지고옴 -->
+						<td><%=list.get(i).getBbsID() %></td>
+						<!-- 제목을 클릭하면 해당 게시글 상세페이지로 이동함 해당게시글 번호를 매개변수로 보냄 -->
+						<td><a href="view.jsp?bbs=<%=list.get(i).getBbsID()%>"><%=list.get(i).getBbsTitle() %></a></td>
+						<td><%=list.get(i).getUserID() %></td>
+						<td><%=list.get(i).getBbsDate().substring(0, 11)+list.get(i).getBbsDate().substring(11, 13)+"시" + list.get(i).getBbsDate().substring(14, 16) + "분" %></td>
 						
-					</tr>
+					</tr>	
+						
+				<%
+					}
+				%>
+					
 				</tbody>
 			</table>
 			<a href="write.jsp" class="btn btn-primary pull-right">글쓰기</a>

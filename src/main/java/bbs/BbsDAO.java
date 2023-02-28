@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public class BbsDAO {
 		//데이터 베이스에 접근 객체 생성
@@ -83,6 +84,7 @@ public class BbsDAO {
 				pstmt.setInt(6, 1);
 				//실행된결과 가지고오기
 				//instert 문은 executeUpdate 가 사용됨
+
 				return pstmt.executeUpdate();
 			
 			} catch (Exception e) {
@@ -90,6 +92,61 @@ public class BbsDAO {
 			}
 			return -1;//데이터베이스 오류
 		}
+		//특정한 리스트를 담아서 반환 10개의 게시글당 페이징처리
+		public ArrayList<Bbs> getList(int pageNumber){
+			//bbsID가 ? 작을경우 삭제가 되지않은 Available이 1인 값을 가져온다
+			String sql = "SELECT * FROM BBS WHERE bbsID < ? AND bbsAvailable =1 ORDER BY bbsID DESC LIMIT 10";
+			//bbs클래스에서 나오는 인스턴스를 보관하는 list를 만들어줌
+			ArrayList<Bbs> list = new ArrayList<Bbs>();
+			try {
+				//연결되어있는 conn객체를 통해 sql문을 실행준비 단계
+				PreparedStatement pstmt = conn.prepareStatement(sql);
+				//getNext는 그다음으로 작성되는 글 번호 지금 게시글 번호가 5일경우 getNext의값은 6이다
+				//pageNumber 값은 1이다  그래서 getNext의 값은 6이다 그래서 bbsID가 6보다 작은값을 다가져온다
+				pstmt.setInt(1, getNext()- (pageNumber-1)*10);
+				//실행된결과 가지고오기
+				rs = pstmt.executeQuery();
+				while(rs.next()) {
+					//bbs라는 인스턴스를 만듬
+					Bbs bbs= new Bbs();
+					//bbs에 담긴 모든 속성들을 가지고온다
+					bbs.setBbsID(rs.getInt(1));
+					bbs.setBbsTitle(rs.getString(2));
+					bbs.setUserID(rs.getString(3));
+					bbs.setBbsDate(rs.getString(4));
+					bbs.setBbsContent(rs.getString(5));
+					bbs.setBbsAvailable(rs.getInt(6));
+					//list에 해당 bbs라는 인스턴스를 담아서 반환한다
+					list.add(bbs);
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return list;//데이터베이스 오류
+		}
 		
+		//nextPage함수 게시글이 10단위로 떨어질때 다음페이지가 없어야한다
+		//페이징처리를 위해서 만든 함수이다.
+		public boolean nextPage(int pageNumber) {
+			//bbsID가 ? 작을경우 삭제가 되지않은 Available이 1인 값을 가져온다
+			String sql = "SELECT * FROM BBS WHERE bbsID < ? AND bbsAvailable =1 ORDER BY bbsID DESC LIMIT 10";
+			try {
+			
+				PreparedStatement pstmt = conn.prepareStatement(sql);				
+				pstmt.setInt(1, getNext()- (pageNumber-1)*10);
+				
+				rs = pstmt.executeQuery();
+				//실행된결과가 하나라도 존재한다면
+				if(rs.next()) {
+					return true;
+					//다음 페이지로 넘어감
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return false;//안넘어감
+		}
 		
 }

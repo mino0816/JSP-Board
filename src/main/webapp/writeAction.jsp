@@ -30,7 +30,7 @@
 			userID=(String)session.getAttribute("userID");
 		}
 		//userID가 null값이 아닌경우
-		if(userID != null){
+		if(userID == null){
 			
 			PrintWriter script = response.getWriter();
 			script.println("<script>");
@@ -49,7 +49,8 @@
 			script.println("</script>");
 		}else{
 			//bbsDAO인스턴스 생성
-			BbsDAO bbsDAO = new BbsDAO();			
+			BbsDAO bbsDAO = new BbsDAO();	
+			//write 함수 사용해서 게시글을 작성해줌
 			int result = bbsDAO.write(bbs.getBbsTitle(), userID, bbs.getBbsContent());
 			if(result == -1){ 
 			
