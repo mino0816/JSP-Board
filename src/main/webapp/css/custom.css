@@ -1,0 +1,8 @@
+/*구글에서 제공하는 폰트 사용*/
+
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@800&family=Shantell+Sans:ital,wght@1,300&display=swap');
+*{
+	font-family: 'Nanum Gothic', sans-serif;
+
+}
+h1{font-family: 'Shantell Sans', cursive;};

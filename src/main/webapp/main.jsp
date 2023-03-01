@@ -7,6 +7,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width", initial0scale="1">
 <link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="css/custom.css">
 <title>JSP 게시판 만들기</title>
 </head>
 <body>
@@ -65,7 +66,16 @@
 			<%} %>
 		</div>
 	</nav>
+	 <div class="container">
+	 	<div class="jumbotron">
+	 		<div class="container">
+	 			<h1>웹 사이트 소개</h1>
+	 			<p>웹 사이트 소개 말 입니다. 등등등</p>
+	 			<p><a class="btn btn-primary btn-pull" href="#" role="button">자세히 알아보기</a></p>
+	 		</div>
+	 	</div>
 	 
+	 </div>
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 	<script src="js/bootstrap.js"></script>
 </body>

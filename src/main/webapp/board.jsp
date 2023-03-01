@@ -100,7 +100,7 @@
 						<!-- 현재 게시글의 정보들을 가지고옴 -->
 						<td><%=list.get(i).getBbsID() %></td>
 						<!-- 제목을 클릭하면 해당 게시글 상세페이지로 이동함 해당게시글 번호를 매개변수로 보냄 -->
-						<td><a href="view.jsp?bbs=<%=list.get(i).getBbsID()%>"><%=list.get(i).getBbsTitle() %></a></td>
+						<td><a href="view.jsp?bbsID=<%=list.get(i).getBbsID()%>"><%=list.get(i).getBbsTitle() %></a></td>
 						<td><%=list.get(i).getUserID() %></td>
 						<td><%=list.get(i).getBbsDate().substring(0, 11)+list.get(i).getBbsDate().substring(11, 13)+"시" + list.get(i).getBbsDate().substring(14, 16) + "분" %></td>
 						

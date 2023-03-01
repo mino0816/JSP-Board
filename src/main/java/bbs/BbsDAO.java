@@ -149,4 +149,71 @@ public class BbsDAO {
 			return false;//안넘어감
 		}
 		
+		//특정한 아이디에 해당하는 게시글을 가지고옴
+		public Bbs getBbs(int bbsID) {
+			String sql = "SELECT * FROM BBS WHERE bbsID= ?";
+			try {
+			
+				PreparedStatement pstmt = conn.prepareStatement(sql);				
+				pstmt.setInt(1, bbsID);
+				//실행결과를 rs에 담음
+				rs = pstmt.executeQuery();
+				//실행된결과가 하나라도 존재한다면
+				if(rs.next()) {
+					//bbs라는 인스턴스를 만듬
+					Bbs bbs= new Bbs();
+					//bbs에 담긴 모든 속성들을 가지고온다
+					bbs.setBbsID(rs.getInt(1));
+					bbs.setBbsTitle(rs.getString(2));
+					bbs.setUserID(rs.getString(3));
+					bbs.setBbsDate(rs.getString(4));
+					bbs.setBbsContent(rs.getString(5));
+					bbs.setBbsAvailable(rs.getInt(6));
+					//위의 값들을 bbs에 결과들을 리턴시킨다 
+					return bbs;
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;//해당글이 없으면 null을 반환한다
+		}
+		
+		//글 수정 함수생성 특정한 번호에 매개변수로 들어온 제목과 내용을 수정함
+		public int update(int bbsID, String bbsTitle, String bbsContent) {
+			//특정한 id에 제목과 내용을 바꿔줌
+			String sql = "UPDATE BBS SET bbsTitle =?, bbsContent =? WHERE bbsID = ?";
+			try {
+				//연결되어있는 conn객체를 통해 sql문을 실행준비 단계
+				PreparedStatement pstmt = conn.prepareStatement(sql);
+				//게시글 번호
+				pstmt.setString(1, bbsTitle);
+				pstmt.setString(2, bbsContent);
+				pstmt.setInt(3, bbsID);
+			
+				
+
+				return pstmt.executeUpdate();
+			
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return -1;//데이터베이스 오류
+		}
+		
+		//삭제 함수 어떤 글인지 알 수 있게 bbsID값을 받아온다
+		public int delete(int bbsID) {
+			//글을 삭제 하더라도 데이터는 남아있게 available을 0으로 만들어준다 1은 글이 삭제 되지않음을 알려줌
+			String sql = "UPDATE BBS SET bbsAvailable = 0 WHERE bbsID = ?";
+			try {
+				//연결되어있는 conn객체를 통해 sql문을 실행준비 단계
+				PreparedStatement pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, bbsID);
+				//0이상의 값을 반환해서 성공임
+				return pstmt.executeUpdate();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return -1;//데이터베이스 오류
+		}
 }
