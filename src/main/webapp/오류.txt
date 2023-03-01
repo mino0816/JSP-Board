@@ -1,0 +1,11 @@
+게시글을 누르면 게시글 번호는 url에서 잘 가지고 왔음
+그런데 계속 alert가 뜸 알고보니 board.jsp에서
+<td><a href="view.jsp?bbsID=<%=list.get(i).getBbsID()%>"><%=list.get(i).getBbsTitle() %></a></td>
+이부분에 bbs=<%=~~~%> 이렇게 오타가 있었음
+그러니까 계속 bbs만 넘기고있었음
+bbsID지정도 안했으니까 계속 bbsID값이 0으로 넘어왔음 
+오타를 고치고 나니까 아주 잘 넘어옴
+
+
+수정,삭제버튼 작동을 안함
+알고보니 view.jsp a태그에 href에서 f가 빠짐
